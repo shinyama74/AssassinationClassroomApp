@@ -1,9 +1,13 @@
 package com.example.recyclerview
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item_character_data_cell.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +32,23 @@ class MainActivity : AppCompatActivity() {
         val adapter = RecyclerViewAdapter(this)
         recyclerView.layoutManager=LinearLayoutManager(this)
         recyclerView.adapter=adapter
-
         adapter.addAll(characterData)
+
+        val preview = Intent(this,PreviewActivity::class.java)
+
+        //インターフェースの実装
+        adapter.setOnItemClickListener(object:RecyclerViewAdapter.OnItemClickListener{
+            override fun onItemClickListener(view: View,position:Int,characterImage:Int,characterName:String,codeName:String,description:String){
+                //クリック時処理
+                preview.putExtra("image",characterImage)
+                preview.putExtra("name",characterName)
+                preview.putExtra("code",codeName)
+                preview.putExtra("description",description)
+                startActivity(preview)
+                //Toast.makeText(applicationContext, "${characterName}がタップされました。コードネームは${codeName}で、以下説明です。★${description}★", Toast.LENGTH_LONG).show()
+            }
+        })
+
+
     }
 }
